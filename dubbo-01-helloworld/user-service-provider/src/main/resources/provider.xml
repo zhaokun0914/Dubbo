@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+    <!-- 1、指定当前服务/应用的名字（同样的服务名字相同，不要和别的服务同名） -->
+    <dubbo:application name="user-service-provider"></dubbo:application>
+
+    <!-- 2、指定注册中心位置 -->
+    <!--<dubbo:registry address="zookeeper://192.168.1.54"></dubbo:registry>-->
+    <dubbo:registry protocol="zookeeper" address="192.168.1.54:2181"></dubbo:registry>
+
+    <!-- 3、指定 消费者和生产者之间的 通讯规则(通信协议、端口) -->
+    <dubbo:protocol name="dubbo" port="20880"></dubbo:protocol>
+
+    <!-- 4、声明要暴露的服务接口 -->
+    <dubbo:service interface="com.fortunebill.gmail.service.UserService" ref="userServiceImpl"></dubbo:service>
+
+    <!-- 服务的实现 -->
+    <bean id="userServiceImpl" class="com.fortunebill.gmail.service.impl.UserServiceImpl"></bean>
+
+    <!-- 连接监控中心 -->
+    <!--<dubbo:monitor protocol="registry"></dubbo:monitor>-->
+    <dubbo:monitor address="127.0.0.1:7070"></dubbo:monitor>
+
+</beans>
