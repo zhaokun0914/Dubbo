@@ -1,0 +1,13 @@
+dubbo:
+  application:
+    name: boot-user-service-provider
+  registry:
+    protocol: zookeeper
+    address: 127.0.0.1:2181
+  protocol:
+    name: dubbo
+    port: 20880
+#  monitor:
+#    protocol: registry
+
+hystrix:

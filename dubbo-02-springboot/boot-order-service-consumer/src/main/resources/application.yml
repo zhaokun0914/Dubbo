@@ -1,0 +1,19 @@
+server:
+  port: 8081
+
+dubbo:
+  application:
+    name: boot-order-service-consumer
+  registry:
+    protocol: zookeeper
+    address: 127.0.0.1:2181
+    # 注册中心启动时检查：如果有注册中心启动正常，如果没有注册中心启动报错，false为关闭检查
+    check: true
+#  monitor:
+#    protocol: registry
+  # 配置当前消费者的统一规则
+  consumer:
+    # 启动的时候所有消费者不检查生产者是否存在，允许程序正常启动，false为关闭检查
+    check: false
+    # 统一超时时间
+    timeout: 5000
