@@ -15,6 +15,7 @@ public class ZookeeperDistributedLockTest {
 
     private static int resource = 0;
     private static String connectString = "192.168.5.205:2181";
+    private static String rootNode = "/locks";
     private static String lockName = "seq-";
 
     public static void main(String[] args) throws Exception {
@@ -22,7 +23,7 @@ public class ZookeeperDistributedLockTest {
         ExecutorService executor = Executors.newFixedThreadPool(50);
 
         // 一定要单独获取 zookeeper 客户端
-        ZooKeeper client = getClient(connectString, lockName);
+        ZooKeeper client = getClient(connectString, rootNode);
 
         for (int i = 0; i < 500; i++) {
             executor.submit(() -> {
@@ -50,7 +51,7 @@ public class ZookeeperDistributedLockTest {
 
     }
 
-    private static ZooKeeper getClient(String connectString, String rootPath) throws Exception{
+    private static ZooKeeper getClient(String connectString, String rootNode) throws Exception{
         CountDownLatch countDownLatch = new CountDownLatch(1);
         ZooKeeper zooKeeper = new ZooKeeper(connectString, 10000, event -> {
             System.out.println(Thread.currentThread().getName() + " ==> 线程发生了事件: " + event.getState());
@@ -59,9 +60,9 @@ public class ZookeeperDistributedLockTest {
             }
         });
         countDownLatch.await();
-        Stat stat = zooKeeper.exists(rootPath, false);
+        Stat stat = zooKeeper.exists(rootNode, false);
         if (stat == null) {
-            zooKeeper.create(rootPath, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            zooKeeper.create(rootNode, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
         }
         return zooKeeper;
     }
